@@ -35,5 +35,6 @@ for file in os.listdir():
         totalnonempty += linesnoempties
         totalcomments += comments
         print(f"{len(lines)}\t\t\t{linesnoempties}\t\t\t{comments}\t\t{file}")
+        f.close()
 
 print(f"Total lines: {total} non-empty: {totalnonempty} comments: {totalcomments}")
