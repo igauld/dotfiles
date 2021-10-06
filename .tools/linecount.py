@@ -49,6 +49,7 @@ def enumDirectory(directory_path, recursion):
                 tot += len(lines)
                 totnoempties += linesnoempties
                 totcomments += comments
+
     if tot > 0:
         print(f"\n{tot}\t\t{totnoempties}\t\t{totcomments}\t\tTOTALS")
 
@@ -61,19 +62,11 @@ def enumDirectory(directory_path, recursion):
 
     return tot, totnoempties, totcomments
 
-total = 0
-totalnonempty = 0
-totalcomments = 0
-
 opts, args = getopt(sys.argv, "r")
 recursion = "-r" in args
 
 print("Total\t\tNon-empty\tComments\tFilename")
 
-total_, linesnoempties, comments = enumDirectory(os.curdir, recursion)
+total, linesnoempties, comments = enumDirectory(os.curdir, recursion)
 
-total += total_
-totalnonempty += linesnoempties
-totalcomments += comments
-
-print(f"\n{total}\t\t{totalnonempty}\t\t{totalcomments}\t\tGRAND")
+print(f"\n{total}\t\t{linesnoempties}\t\t{comments}\t\tGRAND")
