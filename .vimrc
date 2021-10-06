@@ -20,4 +20,7 @@ set tabstop=4
 set shiftwidth=4
 " on pressing tab, insert 4 spaces
 set expandtab
-
+" show column information in status bar
+set ruler
+"  word wrap at 80 columns
+set tw=80
