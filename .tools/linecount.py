@@ -23,6 +23,8 @@ total = 0
 totalnonempty = 0
 totalcomments = 0
 
+print("Total\t\t\tNon-empty\t\tComments\tFilename")
+
 for file in os.listdir():
     
     ext = file[len(file)-3:]
@@ -37,4 +39,4 @@ for file in os.listdir():
         print(f"{len(lines)}\t\t\t{linesnoempties}\t\t\t{comments}\t\t{file}")
         f.close()
 
-print(f"Total lines: {total} non-empty: {totalnonempty} comments: {totalcomments}")
+print(f"\n{total}\t\t\t{totalnonempty}\t\t\t{totalcomments}\t\tTOTALS")
