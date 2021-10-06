@@ -23,16 +23,23 @@ def parseLines(lines):
 
     return count, comments
 
-def enumDirectory(directory_path, recursion):
+def listDirectory(directory_path):
+    try:
+        for file in os.listdir(directory_path):
+            yield file
+    except:
+        return
+
+def enumDirectory(directory_path, recurse):
     tot = 0
     totnoempties = 0
     totcomments = 0
     hit = False
     subdirectories = []
-
-    for file in os.listdir(directory_path):
-        if os.path.isdir(file) and recursion:
-            #enumDirectory(file, recursion)
+        
+    #for file in os.listdir(directory_path):
+    for file in listDirectory(directory_path):
+        if os.path.isdir(file) and recurse:
             subdirectories.append(os.path.join(directory_path, file))
         else:
             ext = file[len(file)-3:]
@@ -41,12 +48,10 @@ def enumDirectory(directory_path, recursion):
                 lines = f.readlines()
                 linesnoempties, comments = parseLines(lines)
                 if hit == False: 
-                    #print(f"\nDirectory: {directory_path}")
                     print(f"Total\t\tNon-empty\tComments\t{directory_path}")
                     hit = True
                 print(f"{len(lines)}\t\t{linesnoempties}\t\t{comments}\t\t{file}")
                 f.close()
-
                 tot += len(lines)
                 totnoempties += linesnoempties
                 totcomments += comments
@@ -55,17 +60,16 @@ def enumDirectory(directory_path, recursion):
         print(f"\n{tot}\t\t{totnoempties}\t\t{totcomments}\t\tTOTALS\n")
 
     for sub in subdirectories:
-        subtotal, subnon, subcom = enumDirectory(sub, recursion)
+        subtotal, subnon, subcom = enumDirectory(sub, recurse)
         tot += subtotal
         totnoempties += subnon
         totcomments += subcom
 
-
     return tot, totnoempties, totcomments
 
 opts, args = getopt(sys.argv, "r")
-recursion = "-r" in args
+recurse = "-r" in args
 
-total, linesnoempties, comments = enumDirectory(os.curdir, recursion)
+total, linesnoempties, comments = enumDirectory(os.curdir, recurse)
 
 print(f"{total}\t\t{linesnoempties}\t\t{comments}\t\tGRAND")
