@@ -27,13 +27,8 @@ def printHelp():
     exit()
 
 def validOperator(operator):
-    result = False
-    validOps = ["+", "-"]
-    if operator in validOps:
-        result = True
-
-    return result
-
+    return operator in ["+", "-"]
+    
 # hack...
 def fixYear(year):
     if len(year) == 4:
@@ -106,5 +101,7 @@ elif operator == "-":
         result = dateDiff(d1, d2)
     else:
         result = dateSubScalar(d1, int(arg2))
-
+else:
+    printHelp()
+    
 print(f"Result: {result}")
