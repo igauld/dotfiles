@@ -22,29 +22,34 @@ import sys
 import datetime
 import re
     
-def printHelp():
+def print_help():
     print(help)
     exit()
 
-def validOperator(operator):
+def valid_operator(operator):
     return operator in ["+", "-"]
     
 # hack...
-def fixYear(year):
+def fix_year(year):
     if len(year) == 4:
         return year
 
     return "20" + year
 
+def fix_day(day):
+    if len(day) < 2:
+        return "0" + day
+
+    return day
 
 # iso format is yyyy-mm-dd but we want to be able to send in
 # dd-mm-yyyy or dd-mm-yy or yyyy-mm-dd
 # note that yy-mm-dd is NOT supported
-def parseDate(s):
+def parse_date(s):
     # seperators are - , / and \
     values = re.split("-|,|/|\\.|\\\\", s)
     if len(values) != 3:
-        printHelp()
+        print_help()
 
     month = values[1]
     if len(values[0]) > 2:
@@ -54,54 +59,54 @@ def parseDate(s):
         year = values[2]
         day = values[0]
     
-    return day, month, fixYear(year)
+    return fix_day(day), month, fix_year(year)
 
-def dateSubScalar(d, value):
+def date_sub_scalar(d, value):
     return d - datetime.timedelta(days=value)
 
-def dateDiff(d1, d2):
+def date_diff(d1, d2):
     return d1 - d2
 
-def dateAdd(day, month, year, value):
+def date_add(day, month, year, value):
     d = datetime.date.fromisoformat(f"{year}-{month}-{day}")
     return d + datetime.timedelta(days=value)
 
 
 if len(sys.argv) != 4:
-    printHelp()
+    print_help()
     
 arg1 = sys.argv[1]
 operator = sys.argv[2]
 arg2 = sys.argv[3]
 
 if not arg1 or not operator or not arg2:
-    printHelp()
+    print_help()
     
-if not validOperator(operator):
-    printHelp()
+if not valid_operator(operator):
+    print_help()
 
 result = 0
 
 if operator == "+":
     if not arg2.isnumeric():
-        printHelp()
+        print_help()
 
-    day, month, year = parseDate(arg1)
+    day, month, year = parse_date(arg1)
 
-    result = dateAdd(day, month, year, int(arg2))
+    result = date_add(day, month, year, int(arg2))
 
 elif operator == "-":
-    day, month, year = parseDate(arg1)
+    day, month, year = parse_date(arg1)
     d1 = datetime.date.fromisoformat(f"{year}-{month}-{day}")
 
     if not arg2.isnumeric():
-        day, month, year = parseDate(arg2)
+        day, month, year = parse_date(arg2)
         d2 = datetime.date.fromisoformat(f"{year}-{month}-{day}")
 
-        result = dateDiff(d1, d2)
+        result = date_diff(d1, d2)
     else:
-        result = dateSubScalar(d1, int(arg2))
+        result = date_sub_scalar(d1, int(arg2))
 else:
-    printHelp()
+    print_help()
     
 print(f"Result: {result}")
